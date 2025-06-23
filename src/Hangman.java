@@ -9,7 +9,7 @@ public class Hangman extends JFrame {
     private String[] wordChallenge;
 
     private final WordDB wordDB;
-    private JLabel hangmanImage, categoryLabel;
+    private JLabel hangmanImage, categoryLabel, hiddenWordLabel;
 
     public Hangman() {
         super("Hangman Game (Java)");
@@ -44,8 +44,20 @@ public class Hangman extends JFrame {
                 categoryLabel.getPreferredSize().height
         );
 
+        // hidden word
+        hiddenWordLabel = new JLabel(CustomTools.hideWords(wordChallenge[1]));
+        hiddenWordLabel.setForeground(Color.WHITE);
+        hiddenWordLabel.setBounds(
+                0,
+                categoryLabel.getY() + categoryLabel.getPreferredSize().height + 50,
+                CommonConstants.FLAME_SIZE.width,
+                hiddenWordLabel.getPreferredSize().height
+        );
 
-        getContentPane().add(hangmanImage);
+
         getContentPane().add(categoryLabel);
+        getContentPane().add(hangmanImage);
+
+        getContentPane().add(hiddenWordLabel);
     }
 }
