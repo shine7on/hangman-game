@@ -13,4 +13,5 @@ public class CommonConstants {
 
     // size config
     public static final Dimension FLAME_SIZE = new Dimension(540, 760);
+    public static final Dimension BUTTON_PANEL_SIZE = new Dimension(FLAME_SIZE.width, (int)(FLAME_SIZE.height * 0.42));
 }
