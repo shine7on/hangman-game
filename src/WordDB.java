@@ -50,7 +50,7 @@ public class WordDB {
         String[] categoryValues = wordList.get(category);
         String word = categoryValues[rand.nextInt(categoryValues.length)];
 
-        // [0] -> catergory and [1] -> word
+        // [0] -> category and [1] -> word
         return new String[]{category.toUpperCase(), word.toUpperCase()};
     }
 }

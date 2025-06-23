@@ -11,8 +11,8 @@ public class CustomTools {
             InputStream inputStream = CustomTools.class.getResourceAsStream(resource);
             image = ImageIO.read(inputStream);
             return new JLabel(new ImageIcon(image));
-        } catch (Exception e) {
-            system.out.printIn("Error: " + e);
+        }catch (Exception e) {
+            System.out.println("Error: " + e);
         }
 
         return null;
