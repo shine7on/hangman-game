@@ -52,6 +52,7 @@ public class Hangman extends JFrame implements ActionListener {
         // hidden word
         hiddenWordLabel = new JLabel(CustomTools.hideWords(wordChallenge[1]));
         hiddenWordLabel.setForeground(Color.WHITE);
+        hiddenWordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         hiddenWordLabel.setBounds(
                 0,
                 categoryLabel.getY() + categoryLabel.getPreferredSize().height + 50,
@@ -60,15 +61,19 @@ public class Hangman extends JFrame implements ActionListener {
         );
 
         // letter buttons
-        GridLayout gridlayout = new GridLayout(4,7);
-        JPanel buttonPanel = new JPanel(gridlayout);
+        GridLayout gridLayout = new GridLayout(4,7);
+        JPanel buttonPanel = new JPanel(gridLayout);
         buttonPanel.setBounds(
                 -5,
                 hiddenWordLabel.getY() + hiddenWordLabel.getPreferredSize().height,
                 CommonConstants.BUTTON_PANEL_SIZE.width,
                 CommonConstants.BUTTON_PANEL_SIZE.height
         );
-        buttonPanel.setLayout(gridlayout);
+
+        buttonPanel.setLayout(gridLayout);
+
+        buttonPanel.setBackground(CommonConstants.BACKGROUND_COLOR);
+        buttonPanel.setOpaque(true);
 
         // creates letter buttons
         for (char c = 'A'; c <= 'Z'; c++ ) {
@@ -84,6 +89,20 @@ public class Hangman extends JFrame implements ActionListener {
             buttonPanel.add(letterButtons[currentIndex]);
         }
 
+        // reset button
+        JButton resetButton = new JButton("Reset");
+        resetButton.setForeground(Color.WHITE);
+        resetButton.setBackground(CommonConstants.SECONDARY_COLOR);
+        resetButton.addActionListener(this);
+        buttonPanel.add(resetButton);
+
+        // quit button
+        JButton quitButton = new JButton("Quit");
+        quitButton.setForeground(Color.WHITE);
+        quitButton.setBackground(CommonConstants.SECONDARY_COLOR);
+        quitButton.addActionListener(this);
+        buttonPanel.add(quitButton);
+
         getContentPane().add(categoryLabel);
         getContentPane().add(hangmanImage);
         getContentPane().add(hiddenWordLabel);
@@ -92,6 +111,36 @@ public class Hangman extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        if (command.equals("Reset")) {
+            resetGame();
+        } else if (command.equals("Quit")) {
+            dispose();
+            return;
+        }
+    }
+
+    private void resetGame() {
+        // load new challenge
+        wordChallenge = wordDB.loadChallenge();
+        incorrectGuesses = 0;
+
+        // load starting image
+        CustomTools.updateImage(hangmanImage, CommonConstants.IMAGE_PATH);
+
+        // update category
+        categoryLabel.setText(wordChallenge[0]);
+
+        // update hiddenWord
+        String hiddenWord = CustomTools.hideWords(wordChallenge[1]);
+        hiddenWordLabel.setText(hiddenWord);
+
+        // enable all buttons
+        for (int i = 0; i < letterButtons.length; i++) {
+            letterButtons[i].setEnabled(true);
+            letterButtons[i].setBackground(CommonConstants.PRIMARY_COLOR);
+        }
 
     }
 }
