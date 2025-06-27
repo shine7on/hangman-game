@@ -72,14 +72,15 @@ public class Hangman extends JFrame implements ActionListener {
 
         buttonPanel.setLayout(gridLayout);
 
-        buttonPanel.setBackground(CommonConstants.BACKGROUND_COLOR);
+        // buttonPanel.setBackground(CommonConstants.BACKGROUND_COLOR);
         buttonPanel.setOpaque(true);
 
         // creates letter buttons
         for (char c = 'A'; c <= 'Z'; c++ ) {
             JButton button = new JButton(Character.toString(c));
+            button.setFocusPainted(false);
+            // button.setForeground(Color.WHITE);
             button.setBackground(CommonConstants.PRIMARY_COLOR);
-            button.setForeground(Color.WHITE);
             button.addActionListener(this);
 
             // using ASCII value to calculate the current index
@@ -91,8 +92,8 @@ public class Hangman extends JFrame implements ActionListener {
 
         // reset button
         JButton resetButton = new JButton("Reset");
-        resetButton.setForeground(Color.WHITE);
         resetButton.setBackground(CommonConstants.SECONDARY_COLOR);
+        resetButton.setForeground(Color.WHITE);
         resetButton.addActionListener(this);
         buttonPanel.add(resetButton);
 
@@ -103,10 +104,11 @@ public class Hangman extends JFrame implements ActionListener {
         quitButton.addActionListener(this);
         buttonPanel.add(quitButton);
 
+        getContentPane().add(buttonPanel);
         getContentPane().add(categoryLabel);
         getContentPane().add(hangmanImage);
         getContentPane().add(hiddenWordLabel);
-        getContentPane().add(buttonPanel);
+
     }
 
     @Override
@@ -118,6 +120,45 @@ public class Hangman extends JFrame implements ActionListener {
         } else if (command.equals("Quit")) {
             dispose();
             return;
+        } else {
+            // letter buttons
+
+            // disable button
+            JButton button = (JButton) e.getSource();
+            button.setEnabled(false);
+
+            // check if the word contains users guess
+            if (wordChallenge[1].contains(command)) {
+                // indicate that user got
+                button.setBackground(Color.GREEN);
+
+                // store the hidden word in a char array, so update the hidden text
+                char[] hiddenWord = hiddenWordLabel.getText().toCharArray();
+
+                for (int i = 0; i < wordChallenge[1].length(); i++) {
+                    //update _ to correct letter
+                    if (wordChallenge[1].charAt(i) == command.charAt(0)) {
+                        hiddenWord[i] = command.charAt(0);
+                    }
+                }
+
+                // update hiddenWordLabel
+                hiddenWordLabel.setText(String.valueOf(hiddenWord));
+
+                // the user guessed the word right
+            } else {
+                // indicate the user chose the wrong letter
+                button.setBackground(Color.RED);
+
+                // increase the incorrect letter
+                ++incorrectGuesses;
+
+                // update the hangman image
+                CustomTools.updateImage(hangmanImage, "resources/" + (incorrectGuesses + 1) + ".png");
+
+                // user failed to guess word right
+            }
+
         }
     }
 
